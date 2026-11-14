@@ -22,7 +22,7 @@
 1. 给浏览器装一个用户脚本管理器：[Tampermonkey](https://www.tampermonkey.net/)（Chrome / Edge / Firefox / Safari 均有）
 2. 安装脚本，三个地址任选其一：
    - [Greasy Fork](https://greasyfork.org/zh-CN/scripts/605541)：版本更新会自动推送
-   - CDN：[bilibili-live-gift-value.user.js](https://cdn.jsdelivr.net/gh/kingsely666/bili-live-gift-value@main/bilibili-live-gift-value.user.js)（国内可直连）
+   - CDN：[bilibili-live-gift-value.user.js](https://cdn.jsdelivr.net/gh/kingsely666/bili-live-gift-value@latest/bilibili-live-gift-value.user.js)（国内可直连，始终指向最新 Release）
    - GitHub：[raw.githubusercontent.com](https://raw.githubusercontent.com/kingsely666/bili-live-gift-value/main/bilibili-live-gift-value.user.js)
 3. 打开任意直播间，聊天栏出现礼物播报时自动生效
 
