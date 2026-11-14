@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         B站直播间礼物价值标注（电池）
 // @namespace    https://workbuddy.local/blgv
-// @version      1.2.3
+// @version      1.2.4
 // @description  只在聊天栏「观众送出的礼物」播报后标注价值（默认电池数），不碰送礼面板/礼物列表；网页内设置面板，修改后保存才生效；自动同步 B 站新增礼物，支持人民币、单价/本次总价、连击实时更新、本场累计。
 // @author       WorkBuddy
 // @license      MIT
@@ -24,6 +24,8 @@
 //    若写了 @name:xx 本地化名称，必须同时写非空的 @description:xx，否则 Greasy Fork 会拒绝导入。
 // 3. 每次发布都要把 @version 往上加，Greasy Fork 才会推送更新。
 // 4. @downloadURL / @updateURL 由 Greasy Fork 自动注入，不用手写。
+// 5. Greasy Fork 脚本 ID 605541；仓库配了账号级 webhook，push 后代码自动同步。
+//    附加信息 INFO.md 需在脚本管理页「源代码同步」里配置一次同步链接，之后同样自动同步。
 
 /*
  * 原理说明
@@ -56,6 +58,7 @@
  *
  * 更新日志
  * ------------------------------------------------------------------
+ * v1.2.4：补充 Greasy Fork 上架与自动同步说明，功能无变化。
  * v1.2.3：安装说明补充 Greasy Fork 地址，功能无变化。
  * v1.2.2：移除 @name:en / @description:en 本地化元数据，与已上架脚本保持同样的头部结构。
  * v1.2.1：补齐 @description:en，与 @name:en 成对，满足 Greasy Fork 的本地化字段校验。
