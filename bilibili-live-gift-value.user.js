@@ -2,8 +2,9 @@
 // @name         B站直播间礼物价值标注（电池）
 // @name:en      Bilibili Live Gift Value Badge
 // @namespace    https://workbuddy.local/blgv
-// @version      1.2.0
+// @version      1.2.1
 // @description  只在聊天栏「观众送出的礼物」播报后标注价值（默认电池数），不碰送礼面板/礼物列表；网页内设置面板，修改后保存才生效；自动同步 B 站新增礼物，支持人民币、单价/本次总价、连击实时更新、本场累计。
+// @description:en Show each gift's value in batteries after gift messages in Bilibili live chat, with an in-page settings panel, online price sync and session totals.
 // @author       WorkBuddy
 // @license      MIT
 // @match        https://live.bilibili.com/*
@@ -22,6 +23,7 @@
 // 1. @namespace 必须保持 https://workbuddy.local/blgv 不变，Tampermonkey 才认作同一个脚本、
 //    能原地升级；改成 greasyfork.org/users/xxx 会被当成新脚本，与本地版并存两份。
 // 2. @description 只放一句话（列表页会截断），详细说明请填在 Greasy Fork 表单的「附加信息」里。
+//    若写了 @name:xx 本地化名称，必须同时写非空的 @description:xx，否则 Greasy Fork 会拒绝导入。
 // 3. 每次发布都要把 @version 往上加，Greasy Fork 才会推送更新。
 // 4. @downloadURL / @updateURL 由 Greasy Fork 自动注入，不用手写。
 
@@ -56,6 +58,7 @@
  *
  * 更新日志
  * ------------------------------------------------------------------
+ * v1.2.1：补齐 @description:en，与 @name:en 成对，满足 Greasy Fork 的本地化字段校验。
  * v1.2.0：设置改为网页内面板，改动需点「保存」确认后生效；原本挂在油猴菜单上的
  *         刷新价格表 / 查看运行状态 / 重置累计，一并移入面板「工具与状态」区。
  *
