@@ -20,8 +20,9 @@
 ## 安装
 
 1. 给浏览器装一个用户脚本管理器：[Tampermonkey](https://www.tampermonkey.net/)（Chrome / Edge / Firefox / Safari 均有）
-2. 安装脚本，两个地址任选（前者国内可直连）：
-   - CDN：[bilibili-live-gift-value.user.js](https://cdn.jsdelivr.net/gh/kingsely666/bili-live-gift-value@main/bilibili-live-gift-value.user.js)
+2. 安装脚本，三个地址任选其一：
+   - [Greasy Fork](https://greasyfork.org/zh-CN/scripts/605541)：版本更新会自动推送
+   - CDN：[bilibili-live-gift-value.user.js](https://cdn.jsdelivr.net/gh/kingsely666/bili-live-gift-value@main/bilibili-live-gift-value.user.js)（国内可直连）
    - GitHub：[raw.githubusercontent.com](https://raw.githubusercontent.com/kingsely666/bili-live-gift-value/main/bilibili-live-gift-value.user.js)
 3. 打开任意直播间，聊天栏出现礼物播报时自动生效
 
@@ -79,6 +80,7 @@
 
 ## 更新日志
 
+- **1.2.3** 安装说明补充 Greasy Fork 地址，功能无变化
 - **1.2.2** 移除本地化名称与描述元数据，使脚本头部结构与 Greasy Fork 导入校验兼容
 - **1.2.1** 补齐英文描述元数据，使脚本通过 Greasy Fork 的本地化字段校验
 - **1.2.0** 设置改为网页内面板，改动需点「保存」确认后生效；刷新价格表、重置累计与运行状态移入面板「工具与状态」区，并新增「复制运行状态」
