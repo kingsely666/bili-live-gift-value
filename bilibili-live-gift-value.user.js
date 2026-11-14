@@ -1,10 +1,8 @@
 // ==UserScript==
 // @name         B站直播间礼物价值标注（电池）
-// @name:en      Bilibili Live Gift Value Badge
 // @namespace    https://workbuddy.local/blgv
-// @version      1.2.1
+// @version      1.2.2
 // @description  只在聊天栏「观众送出的礼物」播报后标注价值（默认电池数），不碰送礼面板/礼物列表；网页内设置面板，修改后保存才生效；自动同步 B 站新增礼物，支持人民币、单价/本次总价、连击实时更新、本场累计。
-// @description:en Show each gift's value in batteries after gift messages in Bilibili live chat, with an in-page settings panel, online price sync and session totals.
 // @author       WorkBuddy
 // @license      MIT
 // @match        https://live.bilibili.com/*
@@ -58,6 +56,7 @@
  *
  * 更新日志
  * ------------------------------------------------------------------
+ * v1.2.2：移除 @name:en / @description:en 本地化元数据，与已上架脚本保持同样的头部结构。
  * v1.2.1：补齐 @description:en，与 @name:en 成对，满足 Greasy Fork 的本地化字段校验。
  * v1.2.0：设置改为网页内面板，改动需点「保存」确认后生效；原本挂在油猴菜单上的
  *         刷新价格表 / 查看运行状态 / 重置累计，一并移入面板「工具与状态」区。
