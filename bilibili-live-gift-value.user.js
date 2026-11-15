@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         B站直播间礼物价值标注（电池）
 // @namespace    https://workbuddy.local/blgv
-// @version      1.2.4
+// @version      1.2.5
 // @description  只在聊天栏「观众送出的礼物」播报后标注价值（默认电池数），不碰送礼面板/礼物列表；网页内设置面板，修改后保存才生效；自动同步 B 站新增礼物，支持人民币、单价/本次总价、连击实时更新、本场累计。
 // @author       WorkBuddy
 // @license      MIT
@@ -58,6 +58,8 @@
  *
  * 更新日志
  * ------------------------------------------------------------------
+ * v1.2.5：修复部分礼物播报漏标——识别不再要求元素带 gift 类名，改按「投喂/赠送 + 礼物名
+ *         + 数量」的内容判定；数量解析支持「共N」写法（如「投喂 薯条共6个」标为 6 电池）。
  * v1.2.4：补充 Greasy Fork 上架与自动同步说明，功能无变化。
  * v1.2.3：安装说明补充 Greasy Fork 地址，功能无变化。
  * v1.2.2：移除 @name:en / @description:en 本地化元数据，与已上架脚本保持同样的头部结构。
@@ -486,7 +488,8 @@
   // ============ DOM 解析 ============
   const NAME_SEL = '[class*="gift-name"],[class*="giftName"],[class*="gift-title"]';
   const COUNT_SEL = '[class*="gift-total-count"],[class*="gift-count"],[class*="gift-num"],[class*="giftCount"]';
-  const ITEM_SEL = '.gift-item,[data-type="gift"],.chat-item[class*="gift"]';
+  // 聊天条目也纳入候选，真正的礼物播报交给 isGiftItem 按类名/文案二次判定
+  const ITEM_SEL = '.gift-item,[class*="gift-item"],[class*="giftItem"],[data-type="gift"],.chat-item,[class*="gift-broadcast"]';
 
   // 聊天消息列表容器：只有这些容器里的礼物条目才是「观众送出的礼物」播报
   const CHAT_SEL = [
@@ -508,8 +511,11 @@
     '[class*="rank-list"]', '[class*="guard-panel"]', '[class*="lottery-panel"]'
   ].join(',');
 
-  // 聊天播报一定有动作词；送礼面板格子只有「礼物名 + 原价」，不含这些词
+  // 聊天播报的动作词；部分版本文案省略动作词，只写「礼物名 共N」
   const BROADCAST_RE = /投喂|赠送|送出|送给|打赏/;
+  // 礼物数量标记：共N / xN / ×N。送礼面板格子只有「礼物名 + 原价（如 1电池）」，不含这些标记，
+  // 因此可用它把「面板格子」和「聊天播报」区分开。
+  const GIFT_QTY_RE = /共\s*\d{1,6}|[x×✕X*]\s*\d{1,6}/;
 
   function clean(s) { return String(s || '').replace(/\s+/g, ' ').trim(); }
 
@@ -530,13 +536,28 @@
   }
 
   function isGiftItem(el) {
-    if (!looksLikeGiftItem(el)) return false;
-    // 聊天消息列表容器内 → 就是观众送礼播报，直接放行
-    if (inArea(el, CHAT_SEL)) return true;
-    // 明确属于送礼面板/礼物弹层 → 永不标注
-    if (inArea(el, EXCLUDE_SEL)) return false;
-    // 容器类名被 B 站改掉时，用播报文案兜底；面板格子不含动作词
-    return BROADCAST_RE.test(el.textContent || '');
+    if (!el || el.nodeType !== 1) return false;
+    const inChat = inArea(el, CHAT_SEL);
+    // 明确属于送礼面板 / 礼物弹层 / 礼物榜（且不在聊天列表内）→ 永不标注
+    if (inArea(el, EXCLUDE_SEL) && !inChat) return false;
+
+    const text = el.textContent || '';
+
+    // 1) 类名/DOM 已明确是礼物条目
+    if (looksLikeGiftItem(el)) {
+      if (inChat) return true;                                  // 聊天列表内的礼物条目
+      return BROADCAST_RE.test(text) || GIFT_QTY_RE.test(text); // 容器类名改版时用文案兜底
+    }
+
+    // 2) 类名没命中：按文案兜底，覆盖「用户名 投喂 礼物名 共N」及省略动作词的新版播报
+    if (!text || text.length > 120) return false;
+    if (el.querySelector && el.querySelector('.chat-item')) return false;  // 是容器，单据交给内部条目
+    const hasVerb = BROADCAST_RE.test(text);
+    const hasQty = GIFT_QTY_RE.test(text);
+    if (!hasVerb && !hasQty) return false;
+    // 只有「礼物名 + 数量」、没有动作词时，必须在聊天容器内，避免误标带 x1 的礼物面板格子
+    if (!hasVerb && !inChat) return false;
+    return !!matchName(text);
   }
 
   // 取除徽章以外的纯文本（徽章里的数字会干扰数量解析）
@@ -582,6 +603,7 @@
   function parseNumber(text) {
     if (!text) return null;
     let m = text.match(/[x×✕X*]\s*(\d{1,6})/);
+    if (!m) m = text.match(/共\s*(\d{1,6})/);
     if (!m) m = text.match(/(\d{1,6})\s*(?:个|连击|件)/);
     if (!m) m = text.match(/^\s*(\d{1,6})\s*$/);
     if (!m) return null;
